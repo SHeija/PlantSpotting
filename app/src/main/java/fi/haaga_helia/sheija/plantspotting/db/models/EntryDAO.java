@@ -20,9 +20,13 @@ public interface EntryDAO {
     @Query("SELECT COUNT(*) FROM entry")
     int countEntries();
 
+    @Query("DELETE FROM entry")
+    void exterminatus();
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Entry entry);
 
     @Delete
     void delete(Entry entry);
+
 }
