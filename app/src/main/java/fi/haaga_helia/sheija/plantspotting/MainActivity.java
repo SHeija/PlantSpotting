@@ -7,6 +7,10 @@ import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Adapter;
 import android.widget.Button;
@@ -30,7 +34,6 @@ public class MainActivity extends AppCompatActivity {
     private RecyclerViewAdapter adapter;
     private AppDatabase db;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
 
         //activating the recyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        adapter = new RecyclerViewAdapter(entryList);
+        adapter = new RecyclerViewAdapter(entryList, db);
         //and making it behave
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -51,19 +54,9 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
 
         //inserting some test data
-        addTestData(db, 5);
-
-        //button
-        Button button = findViewById(R.id.button);
-        button.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                db.clearAllTables();
-                adapter.notifyDataSetChanged();
-                Intent intent = new Intent(MainActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
+        if(entryList.size()==0) {
+            addTestData(db, 5);
+        }
 
     }
 
@@ -75,6 +68,33 @@ public class MainActivity extends AppCompatActivity {
         adapter.notifyDataSetChanged();
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.main_menu, menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item){
+        switch (item.getItemId()){
+            case R.id.menuAddEntry:
+                Log.d("Options", "Options menussa valittu add");
+                Intent moveToAdd = new Intent(this, AddNewEntry.class);
+                startActivity(moveToAdd);
+                return true;
+
+            case R.id.menuRemoveAll:
+                db.entryDao().exterminatus();
+                refreshList(db);
+                adapter.notifyDataSetChanged();
+                recreate();
+                return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
     private Entry testData(){
         Entry testentry = new Entry();
         testentry.setName(UUID.randomUUID().toString());
@@ -84,12 +104,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void addTestData(AppDatabase db, int howMany){
-        for (int i = 0; i<howMany; i++){
-            db.entryDao().insert(testData());
-        }
-
-        adapter.notifyDataSetChanged();
-        showToast("test data added");
+            for (int i = 0; i<howMany; i++){
+                db.entryDao().insert(testData());
+            }
+            showToast("test data added");
+            recreate();
     }
 
     private void refreshList(AppDatabase db){
