@@ -29,6 +29,9 @@ public class Entry {
     @ColumnInfo(name="note")
     private String note;
 
+    @ColumnInfo
+    private String imagePath;
+
     public Entry() {
 
     }
@@ -83,4 +86,11 @@ public class Entry {
         this.note = note;
     }
 
+    public String getImagePath() {
+        return imagePath;
+    }
+
+    public void setImagePath(String imagePath) {
+        this.imagePath = imagePath;
+    }
 }

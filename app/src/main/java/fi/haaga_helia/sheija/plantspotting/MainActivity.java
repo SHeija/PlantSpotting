@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity {
 
         //inserting some test data
         if(entryList.size()==0) {
-            addTestData(db, 5);
+            addTestData(db, 2);
         }
 
     }

@@ -1,6 +1,7 @@
 package fi.haaga_helia.sheija.plantspotting;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -8,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
@@ -34,7 +36,8 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
     //viewholder
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener, View.OnCreateContextMenuListener, PopupMenu.OnMenuItemClickListener{
-        public TextView name, latinName, note;
+        public TextView name, latinName, date, location, note;
+        public ImageView imagePath;
         public LinearLayout linearLayout;
 
         //mitä yhdessä viewholderissa on
@@ -44,6 +47,9 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             name = view.findViewById(R.id.entryName);
             latinName = view.findViewById(R.id.entryLatinName);
             note = view.findViewById(R.id.entryNote);
+            date = view.findViewById(R.id.entryDate);
+            location = view.findViewById(R.id.entryLocation);
+            imagePath = view.findViewById(R.id.entryImagePath);
 
             //kun viewholderia klikataan
             view.setOnClickListener(this);
@@ -91,7 +97,13 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         Entry entry = entryList.get(position);
         holder.name.setText(entry.getName());
         holder.latinName.setText(entry.getLatinName());
+        holder.date.setText(entry.getDate());
+        holder.location.setText(entry.getLocation());
         holder.note.setText(entry.getNote());
+
+        if (entry.getImagePath() != null) {
+            holder.imagePath.setImageURI(Uri.parse(entry.getImagePath()));
+        }
     }
 
     @Override

@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".AddNewEntry">
 
+    <Button
+        android:id="@+id/cameraButton"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Camera" />
     <EditText
         android:id="@+id/addNameEditText"
         android:layout_width="match_parent"
