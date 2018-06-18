@@ -49,7 +49,7 @@ public class MainActivity extends AppCompatActivity {
 
         //activating the recyclerView
         RecyclerView recyclerView = findViewById(R.id.recycler_view);
-        adapter = new RecyclerViewAdapter(entryList, db);
+        adapter = new RecyclerViewAdapter(entryList, getApplicationContext());
         //and making it behave
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getApplicationContext());
         recyclerView.setLayoutManager(layoutManager);
@@ -66,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        db = getDb();
+        //db = getDb();
         refreshList(db);
         adapter.notifyDataSetChanged();
     }

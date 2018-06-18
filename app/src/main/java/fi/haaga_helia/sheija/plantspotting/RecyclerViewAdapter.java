@@ -1,6 +1,9 @@
 package fi.haaga_helia.sheija.plantspotting;
 
+import android.arch.persistence.room.Room;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
@@ -16,6 +19,9 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.squareup.picasso.Picasso;
+
 import java.io.File;
 import java.util.List;
 
@@ -27,13 +33,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private List<Entry> entryList;
     //jesus take the wheel
     private AppDatabase db;
+    Context context;
+
 
 
 
     //konstruktori
-    public RecyclerViewAdapter(List<Entry> entryList, AppDatabase db) { //aaaa
+    public RecyclerViewAdapter(List<Entry> entryList, Context context) { //aaaa
         this.entryList = entryList;
-        this.db = db; //aaaa
+        this.context = context;
+        this.db = getDb();
+        //this.db = db; //aaaa
     }
 
     //viewholder
@@ -101,10 +111,17 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.location.setText(entry.getLocation());
         holder.note.setText(entry.getNote());
 
+        holder.imagePath.setImageDrawable (null);
+
         if (entry.getImagePath() != null) {
-            holder.imagePath.setImageURI(Uri.parse(entry.getImagePath()));
+            //Picasso.with(context).setLoggingEnabled(true);
+            File imageFile = new File(entry.getImagePath());
+            Glide.with(context).load(imageFile).into(holder.imagePath);
+            //holder.imagePath.setImageURI(Uri.parse(entry.getImagePath()));
+            //Picasso.with(context).load(imageFile).into(holder.imagePath);
         }
 
+        ////DEBUG SHIT
         if(position %2 == 1)
         {
             holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
@@ -138,6 +155,14 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
 
         }
 
+    }
+
+
+
+    public AppDatabase getDb(){
+        AppDatabase db = Room.databaseBuilder(context, AppDatabase.class, "entry-database").allowMainThreadQueries()
+                .build();
+        return db;
     }
 }
 
