@@ -7,6 +7,11 @@
     android:layout_height="match_parent"
     tools:context=".AddNewEntry">
 
+    <ImageView
+        android:id="@+id/previewImageView"
+        android:contentDescription="preview image"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
     <Button
         android:id="@+id/cameraButton"
         android:layout_width="match_parent"
@@ -33,26 +38,6 @@
         tools:layout_editor_absoluteY="9dp" />
 
     <EditText
-        android:id="@+id/addDateEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Entry name"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="9dp" />
-
-    <EditText
-        android:id="@+id/addLocationEditText"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:hint="Entry name"
-        android:inputType="textPersonName"
-        tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="9dp" />
-
-    <EditText
         android:id="@+id/addNoteEditText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -61,6 +46,12 @@
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="9dp" />
+
+    <Switch
+        android:id="@+id/locationSwitch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Add Location Data" />
 
     <Button
         android:id="@+id/addButton"

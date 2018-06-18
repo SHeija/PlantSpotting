@@ -1,18 +1,29 @@
 package fi.haaga_helia.sheija.plantspotting;
 
+import android.Manifest;
 import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
+import android.graphics.Bitmap;
+import android.location.Location;
+import android.location.LocationManager;
+import android.media.Image;
 import android.net.Uri;
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v4.content.FileProvider;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Switch;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -21,6 +32,7 @@ import java.io.IOException;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 
 import fi.haaga_helia.sheija.plantspotting.db.AppDatabase;
@@ -31,6 +43,12 @@ public class AddNewEntry extends AppCompatActivity {
     private AppDatabase db;
     String imagePath;
     Entry entry;
+    Date currentTime;
+    Location location;
+    LocationManager locationManager;
+    ImageView previewImageView;
+    private final int MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION = 1;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +56,8 @@ public class AddNewEntry extends AppCompatActivity {
         setContentView(R.layout.activity_add_new_entry);
 
         entry = new Entry();
+        currentTime  = Calendar.getInstance().getTime();
+        previewImageView = findViewById(R.id.previewImageView);
 
         //cameraButton
         Button cameraButton = findViewById(R.id.cameraButton);
@@ -45,6 +65,46 @@ public class AddNewEntry extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 dispatchTakePictureIntent();
+            }
+        });
+
+        //location-switch
+        final Switch locationSwitch = findViewById(R.id.locationSwitch);
+        locationSwitch.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+
+                    Log.d("click-click", "switch on");
+                    //do we have location permission?
+                    if (ContextCompat.checkSelfPermission(AddNewEntry.this, Manifest.permission.ACCESS_COARSE_LOCATION)
+                            != PackageManager.PERMISSION_GRANTED) {
+
+                        // Permission is not granted, asking for permission
+                        ActivityCompat.requestPermissions(AddNewEntry.this,
+                                new String[]{Manifest.permission.ACCESS_COARSE_LOCATION},
+                                    MY_PERMISSIONS_REQUEST_ACCESS_COARSE_LOCATION);
+
+                            locationSwitch.setChecked(false);
+
+
+
+                    }else{
+                        //permissions ok, getting location
+
+                        locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
+                        try{
+                            location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
+                        }catch (SecurityException e){
+                            //emt.
+                        }
+
+                    }
+
+                }else{
+                    Log.d("click-click", "switch off");
+                    location = null;
+                }
             }
         });
 
@@ -57,15 +117,18 @@ public class AddNewEntry extends AppCompatActivity {
                 //saving the entry
                 EditText addNameEditText = findViewById(R.id.addNameEditText);
                 EditText addLatNameEditText = findViewById(R.id.addLatNameEditText);
-                EditText addDate = findViewById(R.id.addDateEditText); // jokin muu kuin text!
-                EditText addLocation = findViewById(R.id.addLocationEditText); // jokin muu kuin text!
                 EditText addNote = findViewById(R.id.addNoteEditText);
 
                 entry.setName(addNameEditText.getText().toString());
                 entry.setLatinName(addLatNameEditText.getText().toString());
-                entry.setDate(addDate.getText().toString());
-                entry.setLocation(addLocation.getText().toString());
+                entry.setDate(currentTime.toString());
+
                 entry.setNote(addNote.getText().toString());
+
+                if (location!=null){
+                    String longLat = "("+Double.toString(location.getLongitude())+","+Double.toString(location.getLatitude())+")";
+                    entry.setLocation(longLat);
+                }
 
                 //db connection
                 db = getDb();
@@ -83,13 +146,17 @@ public class AddNewEntry extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            Bundle extras = data.getExtras();
+            Bitmap imageBitmap = (Bitmap) extras.get("data");
+            previewImageView.setImageBitmap(imageBitmap);
+
             entry.setImagePath(imagePath);
 
         }
 
     }
 
-    static final int REQUEST_CHOOSE_PHOTO = 0;
+    /*static final int REQUEST_CHOOSE_PHOTO = 0;
 
     private void dispatchChoosePictureIntent(){
         Intent pickPhoto = new Intent(Intent.ACTION_PICK,
@@ -110,7 +177,7 @@ public class AddNewEntry extends AppCompatActivity {
             startActivityForResult(pickPhoto , REQUEST_CHOOSE_PHOTO);
         }
 
-    }
+    }*/
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_TAKE_PHOTO = 1;

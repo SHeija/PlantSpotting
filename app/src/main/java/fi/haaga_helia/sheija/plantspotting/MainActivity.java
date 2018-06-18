@@ -16,7 +16,10 @@ import android.widget.Adapter;
 import android.widget.Button;
 import android.widget.TextView;
 
+import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.UUID;
 
@@ -85,6 +88,12 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.menuRemoveAll:
+                for(Entry entry :entryList){
+                    if (entry.getImagePath() != null){
+                        File temp = new File(entry.getImagePath());
+                        temp.delete();
+                    }
+                }
                 db.entryDao().exterminatus();
                 refreshList(db);
                 adapter.notifyDataSetChanged();
@@ -95,17 +104,20 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    private Entry testData(){
+    private Entry testData(int i){
         Entry testentry = new Entry();
-        testentry.setName(UUID.randomUUID().toString());
-        testentry.setLatinName(UUID.randomUUID().toString());
-        testentry.setNote(UUID.randomUUID().toString());
+        testentry.setName("Name #"+i);
+        testentry.setLatinName("LatName #"+i);
+        Date currentTime = Calendar.getInstance().getTime();
+        testentry.setDate(currentTime.toString());
+        testentry.setLocation("(50.00, 50.50");
+        testentry.setNote("Note #"+i);
         return testentry;
     }
 
     private void addTestData(AppDatabase db, int howMany){
             for (int i = 0; i<howMany; i++){
-                db.entryDao().insert(testData());
+                db.entryDao().insert(testData(i));
             }
             showToast("test data added");
             recreate();

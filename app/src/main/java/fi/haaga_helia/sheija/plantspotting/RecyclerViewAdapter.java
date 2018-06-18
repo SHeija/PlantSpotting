@@ -1,6 +1,7 @@
 package fi.haaga_helia.sheija.plantspotting;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -15,6 +16,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.File;
 import java.util.List;
 
 import fi.haaga_helia.sheija.plantspotting.db.AppDatabase;
@@ -68,9 +70,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         @Override
         public boolean onMenuItemClick(MenuItem item) {
             Log.d("Click-click", "menu at pos "+getLayoutPosition());
-            db.entryDao().delete(entryList.get(getLayoutPosition()));
-            entryList.remove(getLayoutPosition());
-            notifyDataSetChanged();
+            deleteAt(getLayoutPosition());
             return false;
         }
 
@@ -104,10 +104,40 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         if (entry.getImagePath() != null) {
             holder.imagePath.setImageURI(Uri.parse(entry.getImagePath()));
         }
+
+        if(position %2 == 1)
+        {
+            holder.itemView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+            //  holder.imageView.setBackgroundColor(Color.parseColor("#FFFFFF"));
+        }
+        else
+        {
+            holder.itemView.setBackgroundColor(Color.parseColor("#a9a9a9"));
+            //  holder.imageView.setBackgroundColor(Color.parseColor("#FFFAF8FD"));
+        }
+
     }
 
     @Override
     public int getItemCount() {
         return entryList.size();
     }
+
+    private void deleteAt(int layoutPosition){
+        if (entryList.get(layoutPosition).getImagePath() == null || entryList.get(layoutPosition).getImagePath().equals("")){
+            db.entryDao().delete(entryList.get(layoutPosition));
+            entryList.remove(layoutPosition);
+            notifyDataSetChanged();
+        }else{
+            File associatedImage = new File(entryList.get(layoutPosition).getImagePath());
+            if (associatedImage.delete()){
+                db.entryDao().delete(entryList.get(layoutPosition));
+                entryList.remove(layoutPosition);
+                notifyDataSetChanged();
+            }
+
+        }
+
+    }
 }
+
