@@ -1,4 +1,10 @@
 <resources>
     <string name="app_name">PlantSpotting</string>
-    <string name="title_activity_tetsi">tetsi</string>
+ <!-- Add new entry -->
+    <string name="addName">Name</string>
+    <string name="addLatname">Latin name</string>
+    <string name="addNote">Notes</string>
+    <string name="addLocation">Include current location</string>
+    <string name="addCamera">Take a picture</string>
+    <string name="addAdd">Add</string>
 </resources>

@@ -25,6 +25,8 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
 
+import com.bumptech.glide.Glide;
+
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
@@ -146,11 +148,9 @@ public class AddNewEntry extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
-            Bundle extras = data.getExtras();
-            Bitmap imageBitmap = (Bitmap) extras.get("data");
-            previewImageView.setImageBitmap(imageBitmap);
-
             entry.setImagePath(imagePath);
+            File imageFile = new File(entry.getImagePath());
+            Glide.with(getApplicationContext()).load(imageFile).into(previewImageView);
 
         }
 

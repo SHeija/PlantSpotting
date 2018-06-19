@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PlantSpotting</string>
+    <string name="addName">Nimi</string>
+    <string name="addLatname">Latinankielinen nimi</string>
+    <string name="addNote">Muistiinpanot</string>
+    <string name="addLocation">Lisää nykyinen sijainti</string>
+    <string name="addCamera">Ota kuva</string>
+    <string name="addAdd">Lisää</string>
+</resources>
