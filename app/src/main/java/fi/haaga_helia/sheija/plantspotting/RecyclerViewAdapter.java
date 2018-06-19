@@ -29,7 +29,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     private AppDatabase db;
     private Context context;
 
-    //konstruktori
+    //Constructor
     public RecyclerViewAdapter(List<Entry> entryList, Context context) {
         this.entryList = entryList;
         this.context = context;
@@ -42,7 +42,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         public ImageView image;
         public LinearLayout linearLayout;
 
-        //mitä yhdessä viewholderissa on
+        //Finding views
         public MyViewHolder(View view) {
             super(view);
             linearLayout = view.findViewById(R.id.Linear);
@@ -53,7 +53,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             location = view.findViewById(R.id.entryLocation);
             image = view.findViewById(R.id.entryImage);
 
-            //kun viewholderia klikataan
+            //Clicks
             view.setOnClickListener(this);
             view.setOnCreateContextMenuListener(this);
         }
@@ -93,7 +93,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
     @Override
     public void onBindViewHolder(MyViewHolder holder, int position) {
 
-        //laitetaan kentiin juttuja
         Entry entry = entryList.get(position);
         holder.name.setText(entry.getName());
         holder.latinName.setText(entry.getLatinName());
@@ -101,7 +100,7 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
         holder.location.setText(entry.getLocation());
         holder.note.setText(entry.getNote());
 
-        //reseting the picture to avoid weird bugs
+        //resetting the picture to avoid weird bugs
         holder.image.setImageResource(R.drawable.placeholder);
 
         if (entry.getImagePath() != null) {
@@ -123,12 +122,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapte
             notifyDataSetChanged();
         }else{
             File associatedImage = new File(entryList.get(layoutPosition).getImagePath());
-            if (associatedImage.delete()){
-                db.entryDao().delete(entryList.get(layoutPosition));
-                entryList.remove(layoutPosition);
-                notifyDataSetChanged();
-            }
-
+            associatedImage.delete();
+            db.entryDao().delete(entryList.get(layoutPosition));
+            entryList.remove(layoutPosition);
+            notifyDataSetChanged();
         }
 
     }

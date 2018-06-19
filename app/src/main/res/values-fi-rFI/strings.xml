@@ -7,4 +7,9 @@
     <string name="addLocation">Lisää nykyinen sijainti</string>
     <string name="addCamera">Ota kuva</string>
     <string name="addAdd">Lisää</string>
+    <string name="menuRemoveOne">Poista</string>
+    <string name="menuRemoveAll">Poista kaikki</string>
+    <string name="menuAddNew">Lisää</string>
+    <string name="IOERROR">Vituiks män</string>
+    <string name="SECURITYERROR">Vituiks män</string>
 </resources>

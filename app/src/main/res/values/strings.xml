@@ -7,4 +7,13 @@
     <string name="addLocation">Include current location</string>
     <string name="addCamera">Take a picture</string>
     <string name="addAdd">Add</string>
+
+  <!--Menus -->
+    <string name="menuRemoveOne">Delete</string>
+    <string name="menuRemoveAll">Delete All</string>
+    <string name="menuAddNew">Add New</string>
+
+  <!--Misc -->
+    <string name="IOERROR">IOError happened</string>
+    <string name="SECURITYERROR">Security error</string>
 </resources>

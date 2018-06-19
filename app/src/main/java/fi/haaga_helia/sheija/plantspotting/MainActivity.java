@@ -2,6 +2,7 @@ package fi.haaga_helia.sheija.plantspotting;
 
 import android.arch.persistence.room.Room;
 import android.content.Intent;
+import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.DefaultItemAnimator;
@@ -44,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
 
         //db
         db = getDb();
-        //refreshing the entrylist
         refreshList(db);
 
         //activating the recyclerView
@@ -56,19 +56,19 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setItemAnimator(new DefaultItemAnimator());
         recyclerView.setAdapter(adapter);
 
-        //inserting some test data
-        if(entryList.size()==0) {
-            addTestData(db, 2);
-        }
-
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        //db = getDb();
         refreshList(db);
         adapter.notifyDataSetChanged();
+    }
+
+    @Override
+    protected void onDestroy(){
+        super.onDestroy();
+        cleanRedundantImages();
     }
 
     @Override
@@ -88,12 +88,6 @@ public class MainActivity extends AppCompatActivity {
                 return true;
 
             case R.id.menuRemoveAll:
-                for(Entry entry :entryList){
-                    if (entry.getImagePath() != null){
-                        File temp = new File(entry.getImagePath());
-                        temp.delete();
-                    }
-                }
                 db.entryDao().exterminatus();
                 refreshList(db);
                 adapter.notifyDataSetChanged();
@@ -103,7 +97,46 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    private void refreshList(AppDatabase db){
+        entryList = db.entryDao().getAll();
+    }
 
+    private void cleanRedundantImages(){
+        //Kills redundant images created by bad code
+        File directory = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File[] files = directory.listFiles();
+        Log.d("Files", "Size: "+ files.length);
+        List<String> paths = new ArrayList<>();
+        refreshList(db);
+        for (Entry entry : entryList){
+            paths.add(entry.getImagePath());
+        }
+
+        for (File file : files){
+            if(!paths.contains(file.getAbsolutePath())){
+                Log.d("Files","Deleted redundant "+file.getAbsolutePath());
+                file.delete();
+            }
+        }
+        Log.d("Files", "Size: "+ files.length);
+
+    }
+
+    public AppDatabase getDb(){
+        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "entry-database").allowMainThreadQueries()
+                .build();
+        return db;
+    }
+
+    public void showToast(String teksti){
+        int aika = Toast.LENGTH_LONG;
+        Context context = getApplicationContext();
+        Toast toast = Toast.makeText(context, teksti, aika);
+        toast.show();
+    }
+
+    /*
+    //Testdata for debugging
     private Entry testData(int i){
         Entry testentry = new Entry();
         testentry.setName("Name #"+i);
@@ -123,19 +156,5 @@ public class MainActivity extends AppCompatActivity {
             recreate();
     }
 
-    private void refreshList(AppDatabase db){
-        entryList = db.entryDao().getAll();
-    }
-
-    public AppDatabase getDb(){
-        AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "entry-database").allowMainThreadQueries()
-                .build();
-        return db;
-    }
-    public void showToast(String teksti){
-        int aika = Toast.LENGTH_LONG;
-        Context context = getApplicationContext();
-        Toast toast = Toast.makeText(context, teksti, aika);
-        toast.show();
-    }
+    */
 }

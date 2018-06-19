@@ -24,6 +24,7 @@ import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Switch;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 
@@ -31,6 +32,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URI;
 import java.nio.channels.FileChannel;
 import java.nio.file.Files;
 import java.text.SimpleDateFormat;
@@ -46,6 +48,7 @@ public class AddNewEntry extends AppCompatActivity {
     String imagePath;
     Entry entry;
     Date currentTime;
+    File photoFile;
     Location location;
     LocationManager locationManager;
     ImageView previewImageView;
@@ -98,7 +101,9 @@ public class AddNewEntry extends AppCompatActivity {
                         try{
                             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
                         }catch (SecurityException e){
-                            //emt.
+                            Toast toast = Toast.makeText(getApplicationContext(), R.string.SECURITYERROR, Toast.LENGTH_LONG);
+                            toast.show();
+
                         }
 
                     }
@@ -128,7 +133,7 @@ public class AddNewEntry extends AppCompatActivity {
                 entry.setNote(addNote.getText().toString());
 
                 if (location!=null){
-                    String longLat = "("+Double.toString(location.getLongitude())+","+Double.toString(location.getLatitude())+")";
+                    String longLat = "("+Double.toString(location.getLongitude())+", "+Double.toString(location.getLatitude())+")";
                     entry.setLocation(longLat);
                 }
 
@@ -153,31 +158,7 @@ public class AddNewEntry extends AppCompatActivity {
             Glide.with(getApplicationContext()).load(imageFile).into(previewImageView);
 
         }
-
     }
-
-    /*static final int REQUEST_CHOOSE_PHOTO = 0;
-
-    private void dispatchChoosePictureIntent(){
-        Intent pickPhoto = new Intent(Intent.ACTION_PICK,
-                android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-
-        File photoFile = null;
-        try{
-            photoFile = createImageFile();
-        }catch (IOException ex){
-            //nah
-        }
-        if (photoFile != null){
-
-            Uri photoURI = FileProvider.getUriForFile(this,
-                    "fi.haaga_helia.sheija.plantspotting.fileprovider",
-                    photoFile);
-            pickPhoto.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
-            startActivityForResult(pickPhoto , REQUEST_CHOOSE_PHOTO);
-        }
-
-    }*/
 
     static final int REQUEST_IMAGE_CAPTURE = 1;
     static final int REQUEST_TAKE_PHOTO = 1;
@@ -187,11 +168,12 @@ public class AddNewEntry extends AppCompatActivity {
         // Ensure that there's a camera activity to handle the intent
         if (takePictureIntent.resolveActivity(getPackageManager()) != null) {
             // Create the File where the photo should go
-            File photoFile = null;
+            photoFile = null;
             try {
                 photoFile = createImageFile();
             } catch (IOException ex) {
-                // Error occurred while creating the File
+                Toast toast = Toast.makeText(getApplicationContext(), R.string.IOERROR, Toast.LENGTH_LONG);
+                toast.show();
             }
             // Continue only if the File was successfully created
             if (photoFile != null) {
@@ -218,33 +200,12 @@ public class AddNewEntry extends AppCompatActivity {
         return image;
     }
 
-   /* private static void copyFileUsingChannel(File source, File dest) throws IOException {
-        FileChannel sourceChannel = null;
-        FileChannel destChannel = null;
-        try {
-            sourceChannel = new FileInputStream(source).getChannel();
-            Log.d("Bug", "IO fireinputstream onnistui");
-
-            destChannel = new FileOutputStream(dest).getChannel();
-            Log.d("Bug", "IO fileoutputstream onnistui");
-
-            destChannel.transferFrom(sourceChannel, 0, sourceChannel.size());
-        }catch (Exception e){
-            Log.d("Bug", "IO errorlol");
-
-        }
-        finally{
-            sourceChannel.close();
-            destChannel.close();
-        }
-    }*/
-
-
     private String generateFileName(){
         String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
         String imageFileName = "JPEG_" + timeStamp + "_";
         return imageFileName;
     }
+
     public AppDatabase getDb(){
         AppDatabase db = Room.databaseBuilder(getApplicationContext(), AppDatabase.class, "entry-database").allowMainThreadQueries()
                 .build();
