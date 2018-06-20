@@ -96,7 +96,6 @@ public class AddNewEntry extends AppCompatActivity {
 
                     }else{
                         //permissions ok, getting location
-
                         locationManager = (LocationManager) getApplicationContext().getSystemService(LOCATION_SERVICE);
                         try{
                             location = locationManager.getLastKnownLocation(LocationManager.NETWORK_PROVIDER);
@@ -116,7 +115,6 @@ public class AddNewEntry extends AppCompatActivity {
         });
 
         //addButton
-
         Button button = findViewById(R.id.addButton);
         button.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -195,7 +193,6 @@ public class AddNewEntry extends AppCompatActivity {
                 storageDir      /* directory */
         );
 
-        // Save a file: path for use with ACTION_VIEW intents
         imagePath = image.getAbsolutePath();
         return image;
     }

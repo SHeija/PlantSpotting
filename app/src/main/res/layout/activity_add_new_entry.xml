@@ -13,7 +13,8 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
             <ImageView
                 android:id="@+id/previewImageView"
@@ -28,8 +29,11 @@
 
             <Button
                 android:id="@+id/cameraButton"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/addCamera"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -39,6 +43,8 @@
                 android:id="@+id/addNameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:ems="10"
                 android:hint="@string/addName"
                 android:inputType="textPersonName"
@@ -50,6 +56,8 @@
                 android:id="@+id/addLatNameEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:ems="10"
                 android:hint="@string/addLatname"
                 android:inputType="textPersonName"
@@ -61,6 +69,8 @@
                 android:id="@+id/addNoteEditText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:ems="10"
                 android:hint="@string/addNote"
                 android:inputType="textMultiLine"
@@ -72,15 +82,21 @@
                 android:id="@+id/locationSwitch"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/addLocation"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/addNoteEditText" />
+                app:layout_constraintTop_toBottomOf="@+id/addNoteEditText"
+                tools:checked="false" />
 
             <Button
                 android:id="@+id/addButton"
+                style="@style/Widget.AppCompat.Button"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginEnd="8dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/addAdd"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

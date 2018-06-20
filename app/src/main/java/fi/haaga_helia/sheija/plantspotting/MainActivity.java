@@ -128,13 +128,6 @@ public class MainActivity extends AppCompatActivity {
         return db;
     }
 
-    public void showToast(String teksti){
-        int aika = Toast.LENGTH_LONG;
-        Context context = getApplicationContext();
-        Toast toast = Toast.makeText(context, teksti, aika);
-        toast.show();
-    }
-
     /*
     //Testdata for debugging
     private Entry testData(int i){
