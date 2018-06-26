@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/menuAddEntry"
-        android:title="Add Entry"/>
+        android:title="@string/menuAddNew"/>
     <item android:id="@+id/menuRemoveAll"
-        android:title="Remove All"/>
+        android:title="@string/menuRemoveAll"/>
+    <item android:id="@+id/menuCredits"
+        android:title="@string/menuCredits"/>
 </menu>

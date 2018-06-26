@@ -7,7 +7,11 @@ import android.content.Context;
 
 import fi.haaga_helia.sheija.plantspotting.db.models.Entry;
 import fi.haaga_helia.sheija.plantspotting.db.models.EntryDAO;
+/*
 
+Adapted from room persistence library guide
+
+ */
 @Database(entities = {Entry.class}, version = 1)
 public abstract class AppDatabase extends RoomDatabase {
 

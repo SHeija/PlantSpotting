@@ -82,7 +82,6 @@ public class MainActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item){
         switch (item.getItemId()){
             case R.id.menuAddEntry:
-                Log.d("Options", "Options menussa valittu add");
                 Intent moveToAdd = new Intent(this, AddNewEntry.class);
                 startActivity(moveToAdd);
                 return true;
@@ -92,6 +91,11 @@ public class MainActivity extends AppCompatActivity {
                 refreshList(db);
                 adapter.notifyDataSetChanged();
                 recreate();
+                return true;
+
+            case R.id.menuCredits:
+                Intent moveToCredits = new Intent (this, Credits.class);
+                startActivity(moveToCredits);
                 return true;
         }
         return super.onOptionsItemSelected(item);

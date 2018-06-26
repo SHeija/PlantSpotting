@@ -12,4 +12,6 @@
     <string name="menuAddNew">Lisää</string>
     <string name="IOERROR">Vituiks män</string>
     <string name="SECURITYERROR">Vituiks män</string>
+    <string name="ok">OK</string>
+    <string name="menuCredits">Tietoja</string>
 </resources>

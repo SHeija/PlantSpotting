@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="fi.haaga_helia.sheija.plantspotting">
-    <uses-feature android:name="android.hardware.camera"
+
+    <uses-feature
+        android:name="android.hardware.camera"
         android:required="true" />
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
         android:allowBackup="true"
@@ -20,10 +22,9 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".AddNewEntry"
-            android:windowSoftInputMode="stateHidden">
-
-        </activity>
+        <activity
+            android:name=".AddNewEntry"
+            android:windowSoftInputMode="stateHidden"></activity>
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -32,11 +33,10 @@
             android:grantUriPermissions="true">
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
-                android:resource="@xml/file_paths"></meta-data>
+                android:resource="@xml/file_paths" />
         </provider>
 
-
+        <activity android:name=".Credits"></activity>
     </application>
-
 
 </manifest>

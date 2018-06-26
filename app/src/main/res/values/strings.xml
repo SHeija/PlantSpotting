@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">PlantSpotting</string>
- <!-- Add new entry -->
+    <!-- Add new entry -->
     <string name="addName">Name</string>
     <string name="addLatname">Latin name</string>
     <string name="addNote">Notes</string>
@@ -8,12 +8,14 @@
     <string name="addCamera">Take a picture</string>
     <string name="addAdd">Add</string>
 
-  <!--Menus -->
+    <!--Menus -->
     <string name="menuRemoveOne">Delete</string>
     <string name="menuRemoveAll">Delete All</string>
     <string name="menuAddNew">Add New</string>
+    <string name="menuCredits">Credits</string>
 
-  <!--Misc -->
+    <!--Misc -->
+    <string name="ok">OK</string>
     <string name="IOERROR">IOError happened</string>
     <string name="SECURITYERROR">Security error</string>
 </resources>
